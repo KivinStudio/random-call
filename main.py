@@ -13,27 +13,33 @@ class IsPrime:
         root.columnconfigure(0, weight=1)
         root.rowconfigure(0, weight=1)
 
+        # 结果
         self.feet = StringVar()
         feet_entry = ttk.Entry(mainframe, width=7, textvariable=self.feet)
         feet_entry.grid(column=2, row=1, sticky=(W, E))
         self.meters = StringVar()
-
-        ttk.Label(mainframe, textvariable=self.meters).grid(column=2, row=2, sticky=(W, E))
-        ttk.Button(mainframe, text="判断", command=self.calculate).grid(column=3, row=3, sticky=W)
-
-        ttk.Label(mainframe, text="待检").grid(column=3, row=1, sticky=W)
-        ttk.Label(mainframe, text="点击后判断是否为质数：").grid(column=1, row=2, sticky=E)
+        # 按钮
+        ttk.Button(mainframe, text="判断", command=self.Calculate).grid(column=3, row=3, sticky=W)
+        # 文本框
+        ttk.Label(mainframe, text="待检：").grid(column=1, row=1, sticky=W)
+        # 输入框
+        ttk.Label(mainframe, textvariable=self.meters).grid(column=3, row=1, sticky=(W, E))
 
         for child in mainframe.winfo_children():
             child.grid_configure(padx=5, pady=5)
 
         feet_entry.focus()
-        root.bind("<Return>", self.calculate)
+        root.bind("<Return>", self.Calculate)
 
-    def calculate(self, *args):
+    def Calculate(self, *args):
         try:
-            value = float(self.feet.get())
-            self.meters.set(int(0.3048 * value * 10000.0 + 0.5) / 10000.0)
+            value = int(self.feet.get())
+            result = '是质数'
+            for i in range(2, value):
+                if value % i == 0:
+                    result = '不是质数'
+                    break
+            self.meters.set(result)
         except ValueError:
             pass
 
